@@ -334,9 +334,20 @@ const GOAL_COLORS = {
   maintain: "#38bdf8", gain025: "#86efac", gain05: "#4ade80",
 };
 
+// ─── DETECT BROWSER LANGUAGE ──────────────────────────────────────────────────
+function detectLang() {
+  const supported = ["ar", "en", "es", "fr", "pt", "hi", "zh"];
+  const browserLang = (navigator.language || navigator.userLanguage || "en").toLowerCase();
+  // Check full match first (e.g. "zh-cn"), then prefix (e.g. "zh")
+  const full = supported.find(l => browserLang === l);
+  if (full) return full;
+  const prefix = supported.find(l => browserLang.startsWith(l));
+  return prefix || "en"; // default to English
+}
+
 // ─── MAIN ─────────────────────────────────────────────────────────────────────
 export default function App() {
-  const [lang, setLang]     = useState("ar");
+  const [lang, setLang]     = useState(detectLang);
   const [showLangs, setShowLangs] = useState(false);
   const t   = T[lang];
   const meta = LANGS.find(l => l.code === lang);
